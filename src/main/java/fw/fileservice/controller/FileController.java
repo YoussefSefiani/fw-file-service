@@ -54,7 +54,6 @@ public class FileController {
     }
     @GetMapping(path = "{partnershipId}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long partnershipId) {
-        System.out.println(partnershipId);
         FileDB fileDB = storageService.getFile(partnershipId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")

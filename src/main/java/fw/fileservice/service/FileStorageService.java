@@ -20,9 +20,7 @@ public class FileStorageService {
         return fileDBRepository.save(FileDB);
     }
     public FileDB getFile(Long partnershipId) {
-        //TODO: add present check
         FileDB file = fileDBRepository.findByPartnershipId(partnershipId).get();
-        System.out.println("FILE IS " + file);
         return fileDBRepository.findByPartnershipId(partnershipId).get();
     }
 
