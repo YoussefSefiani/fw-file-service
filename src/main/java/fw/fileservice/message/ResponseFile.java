@@ -13,5 +13,6 @@ public class ResponseFile {
     private String url;
     private String type;
     private long size;
+    private Long partnershipId;
 
 }
