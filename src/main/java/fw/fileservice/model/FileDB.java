@@ -15,8 +15,9 @@ import javax.persistence.*;
 public class FileDB {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(
+            strategy = GenerationType.AUTO
+    )
     private String id;
 
     private String name;
