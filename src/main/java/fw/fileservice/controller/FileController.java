@@ -22,6 +22,7 @@ public class FileController {
 
     @Autowired
     private FileStorageService storageService;
+
     @PostMapping("{partnershipId}")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file,
                                                       @PathVariable("partnershipId") Long partnershipId) {
@@ -31,6 +32,7 @@ public class FileController {
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
