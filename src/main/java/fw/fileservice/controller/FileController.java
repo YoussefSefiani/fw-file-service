@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import fw.fileservice.message.ResponseFile;
 import fw.fileservice.message.ResponseMessage;
 import fw.fileservice.model.FileDB;
+import fw.fileservice.model.FileType;
+import fw.fileservice.model.ImageDB;
 import fw.fileservice.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,27 +19,37 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Controller
-@RequestMapping(path = "api/file")
+@RequestMapping(path = "api")
 public class FileController {
 
     @Autowired
     private FileStorageService storageService;
 
-    @PostMapping("{partnershipId}")
+    @PostMapping("file/{partnershipId}")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file,
                                                       @PathVariable("partnershipId") Long partnershipId) {
-        String message = "";
         try {
-            storageService.store(file, partnershipId);
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+            storageService.store(file, partnershipId, FileType.PDF);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("File successfully stored!"));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Error!"));
         }
     }
-    @GetMapping
+
+    @PostMapping("image/{userId}")
+    public ResponseEntity<ResponseMessage> uploadImage(@RequestParam("file") MultipartFile file,
+                                                      @PathVariable("userId") Long userId) {
+        try {
+            storageService.store(file, userId, FileType.IMAGE);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Image successfully stored!"));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Error!"));
+        }
+    }
+
+    @GetMapping("file")
     public ResponseEntity<List<ResponseFile>> getListFiles() {
         List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
@@ -49,17 +61,25 @@ public class FileController {
                     dbFile.getName(),
                     fileDownloadUri,
                     dbFile.getType(),
-                    dbFile.getData().length,
-                    dbFile.getPartnershipId());
+                    dbFile.getData().length);
         }).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
-    @GetMapping(path = "{partnershipId}")
-    public ResponseEntity<byte[]> getFile(@PathVariable Long partnershipId) {
+
+    @GetMapping("file/{partnershipId}")
+    public ResponseEntity<byte[]> getFile(@PathVariable("partnershipId") Long partnershipId) {
         FileDB fileDB = storageService.getFile(partnershipId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
                 .body(fileDB.getData());
+    }
+
+    @GetMapping(path = "image/{userId}")
+    public ResponseEntity<byte[]> getProfileImage(@PathVariable("userId") Long userId) {
+        ImageDB imageDB = storageService.getProfileImage(userId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + imageDB.getName() + "\"")
+                .body(imageDB.getData());
     }
 
 }

@@ -1,5 +1,6 @@
 package fw.fileservice.message;
 
+import fw.fileservice.model.FileType;
 import lombok.*;
 
 @ToString
@@ -13,6 +14,6 @@ public class ResponseFile {
     private String url;
     private String type;
     private long size;
-    private Long partnershipId;
+
 
 }
