@@ -36,14 +36,18 @@ public class FileStorageService {
             fileDBRepository.save(FileDB);
         } else if(fileType.equals(FileType.IMAGE)) {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-            ImageDB imageDB = imageRepository.findByUserId(userId)
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND,
-                            String.format("user with id %s has no profile image", userId))
-                    );
-            ImageDB newImage = new ImageDB(fileName, file.getContentType(), file.getBytes(), userId);
-            imageDB.update(newImage);
-            imageRepository.save(imageDB);
+            Optional<ImageDB> imageDB = imageRepository.findByUserId(userId);
+            if(imageDB.isEmpty()) {
+                ImageDB newImage = new ImageDB(fileName, file.getContentType(), file.getBytes(), userId);
+                imageRepository.save(newImage);
+            } else {
+                ImageDB newImage = new ImageDB(fileName, file.getContentType(), file.getBytes(), userId);
+                imageDB.get().update(newImage);
+                imageRepository.save(newImage);
+            }
+
+
+
         }
     }
 
