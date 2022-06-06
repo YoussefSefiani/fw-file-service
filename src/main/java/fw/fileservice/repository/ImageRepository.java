@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Transactional
 public interface ImageRepository extends JpaRepository<ImageDB, Long> {
+
     Optional<ImageDB> findByUserId(Long userId);
+
 }

@@ -32,4 +32,11 @@ public class ImageDB {
         this.userId = userId;
     }
 
+    public void update(ImageDB image) {
+        this.name = image.getName();
+        this.type = image.getType();
+        this.data = image.getData();
+        this.userId = image.getUserId();
+    }
+
 }

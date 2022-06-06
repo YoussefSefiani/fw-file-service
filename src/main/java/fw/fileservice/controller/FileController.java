@@ -37,7 +37,7 @@ public class FileController {
         }
     }
 
-    @PostMapping("image/{userId}")
+    @PutMapping("image/{userId}")
     public ResponseEntity<ResponseMessage> uploadImage(@RequestParam("file") MultipartFile file,
                                                       @PathVariable("userId") Long userId) {
         try {
