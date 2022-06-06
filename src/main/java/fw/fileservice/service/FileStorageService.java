@@ -41,8 +41,9 @@ public class FileStorageService {
                 ImageDB newImage = new ImageDB(fileName, file.getContentType(), file.getBytes(), userId);
                 imageRepository.save(newImage);
             } else {
+                System.out.println("in here");
+                imageRepository.deleteByUserId(userId);
                 ImageDB newImage = new ImageDB(fileName, file.getContentType(), file.getBytes(), userId);
-                imageDB.get().update(newImage);
                 imageRepository.save(newImage);
             }
 
