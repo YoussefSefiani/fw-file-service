@@ -25,6 +25,11 @@ public class FileController {
     @Autowired
     private FileStorageService storageService;
 
+    @GetMapping(path = "file/ping")
+    public String ping() {
+        return "pong";
+    }
+
     @PostMapping("file/{partnershipId}")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file,
                                                       @PathVariable("partnershipId") Long partnershipId) {
