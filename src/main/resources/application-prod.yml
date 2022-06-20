@@ -5,7 +5,7 @@ spring:
       max-request-size: '10MB'
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://plugger.postgres.database.azure.com:5432/db_fw_auth_service?user=plugger&password=password123-&sslmode=require
+    url: jdbc:postgresql://plugger.postgres.database.azure.com:5432/db_fw_file_service?user=plugger&password=password123-&sslmode=require
   jpa:
     properties:
       hibernate:
