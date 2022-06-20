@@ -5,7 +5,7 @@ spring:
       max-request-size: '10MB'
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${JDBC_DATABASE_URL}
+    url: jdbc:postgresql://plugger.postgres.database.azure.com:5432/db_fw_auth_service?user=plugger&password=password123-&sslmode=require
   jpa:
     properties:
       hibernate:
@@ -26,9 +26,9 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/
+      defaultZone: https://fw-discovery-server.azurewebsites.net/eureka
   instance:
-    hostname: ${DOMAIN_NAME}
+    hostname: fw-auth-service.azurewebsites.net
     nonSecurePort: 80
   password: ${USER_PASSWORD:password}
 security:
